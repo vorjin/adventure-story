@@ -52,9 +52,8 @@ func storyHandler(str map[string]Chapter) http.HandlerFunc {
 		path := strings.Trim(r.URL.Path, "/")
 
 		if story, ok := str[path]; ok {
-			fmt.Println(story)
 			//executing template
-			err := tmpl.Execute(w, nil)
+			err := tmpl.Execute(w, story)
 			if err != nil {
 				panic(err)
 			}

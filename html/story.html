@@ -1,12 +1,227 @@
 <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-  </head>
-  <body>
-    <h1>Home Page</h1>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: linear-gradient(135deg, #8B4513 0%, #654321 50%, #8B4513 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .scroll-container {
+      position: relative;
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+    }
+
+    .scroll {
+      background: linear-gradient(to bottom, #F5E6D3 0%, #E8D5B7 50%, #F5E6D3 100%);
+      border: 3px solid #8B6F47;
+      border-radius: 0;
+      padding: 60px 50px;
+      box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 50px rgba(139, 111, 71, 0.1);
+      position: relative;
+    }
+
+    /* Scroll top and bottom decorative edges */
+    .scroll::before,
+    .scroll::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background: repeating-linear-gradient(
+        90deg,
+        #8B6F47 0px,
+        #8B6F47 20px,
+        #F5E6D3 20px,
+        #F5E6D3 40px
+      );
+    }
+
+    .scroll::before {
+      top: -3px;
+      border-top: 3px solid #8B6F47;
+    }
+
+    .scroll::after {
+      bottom: -3px;
+      border-bottom: 3px solid #8B6F47;
+    }
+
+    /* Aged paper texture */
+    .scroll {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(139, 111, 71, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 111, 71, 0.1) 0%, transparent 50%),
+        linear-gradient(to bottom, #F5E6D3 0%, #E8D5B7 50%, #F5E6D3 100%);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #4A2C17;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      border-bottom: 2px solid #8B6F47;
+      padding-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .story-content {
+      font-size: 1.2em;
+      line-height: 1.8;
+      color: #3D2817;
+      margin-bottom: 40px;
+      text-align: justify;
+    }
+
+    .story-content p {
+      margin-bottom: 20px;
+      text-indent: 2em;
+    }
+
+    .options {
+      margin-top: 50px;
+      border-top: 2px dashed #8B6F47;
+      padding-top: 30px;
+    }
+
+    .options-title {
+      font-size: 1.3em;
+      color: #4A2C17;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .option {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border-left: 4px solid #8B6F47;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .option:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .option-link {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .option-arrow {
+      font-size: 2em;
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(139, 111, 71, 0.2);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover .option-arrow {
+      background: rgba(139, 111, 71, 0.4);
+      transform: scale(1.1);
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #3D2817;
+    }
+
+    /* Different arrows for different options */
+    .option:nth-child(1) .option-arrow::before { content: '←'; }
+    .option:nth-child(2) .option-arrow::before { content: '→'; }
+    .option:nth-child(3) .option-arrow::before { content: '↑'; }
+    .option:nth-child(4) .option-arrow::before { content: '↓'; }
+    .option:nth-child(5) .option-arrow::before { content: '↖'; }
+    .option:nth-child(6) .option-arrow::before { content: '↗'; }
+    .option:nth-child(7) .option-arrow::before { content: '↙'; }
+    .option:nth-child(8) .option-arrow::before { content: '↘'; }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .scroll {
+        padding: 40px 30px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      .story-content {
+        font-size: 1.1em;
+      }
+
+      .option-link {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .option-arrow {
+        align-self: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-container">
+    <div class="scroll">
+      <h1>{{ .Title }}</h1>
+      
+      <div class="story-content">
+        {{ range .Story }}
+        <p>{{ . }}</p>
+        {{ end }}
+      </div>
+
+      {{ if .Options }}
+      <div class="options">
+        <div class="options-title">Choose Your Path:</div>
+        {{ range .Options }}
+        <div class="option">
+          <a href="/{{ .Arc }}" class="option-link">
+            <div class="option-arrow"></div>
+            <div class="option-text">{{ .Text }}</div>
+          </a>
+        </div>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</body>
 </html>
 
