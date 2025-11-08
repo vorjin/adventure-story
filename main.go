@@ -61,6 +61,7 @@ func storyHandler(str map[string]Chapter) http.HandlerFunc {
 			return
 		} else {
 			fmt.Printf("Chapter key not found: %s", r.URL.Path)
+			http.Redirect(w, r, "intro", http.StatusFound)
 		}
 	}
 }
