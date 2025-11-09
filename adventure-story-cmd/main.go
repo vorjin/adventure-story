@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"slices"
 )
 
 type Option struct {
@@ -28,35 +29,55 @@ func main() {
 		panic(err)
 	}
 
+	// parsing the JSON file
 	var storyFile map[string]Chapter
 	err = json.Unmarshal([]byte(storyJSON), &storyFile)
 	if err != nil {
 		panic(err)
 	}
 
+	//beginning the story
 	fmt.Println("Let's begin our adventure!")
-	storyTeller("intro", storyFile)
-
-	var userChoice string
-	fmt.Scan(&userChoice)
+	userChoice := storyTeller("intro", storyFile)
 
 	for userChoice != "quit" {
-		storyTeller(userChoice, storyFile)
-		fmt.Scan(&userChoice)
+		userChoice = storyTeller(userChoice, storyFile)
 	}
 }
 
-func storyTeller(chp string, str map[string]Chapter) {
-
+func storyTeller(chp string, str map[string]Chapter) string {
 	if story, ok := str[chp]; ok {
-		for _, text := range story.Story {
-			fmt.Println(text)
+		printStory(story)
+		// working with user input
+		var index int
+		fmt.Scan(&index)
+
+		if index == 0 {
+			return "quit"
+		} else if index > len(story.Options) {
+			fmt.Println("Please, choose the correct option value")
+			return chp
+		} else {
+			trueIndex := index - 1
+			userAnswer := story.Options[trueIndex].Arc
+			return userAnswer
 		}
-		for _, option := range story.Options {
-			fmt.Println("Print <", option.Arc, "> to do:")
-			fmt.Println(option.Text)
-		}
-		fmt.Println("Print < quit > to exit program.")
-		fmt.Println()
+	} else {
+		fmt.Println("Error, the chapter was not found.")
+		return "quit"
 	}
+}
+
+func printStory(story Chapter) {
+	for _, text := range story.Story {
+		fmt.Println(text)
+	}
+	fmt.Println()
+	// printing the options
+	for _, option := range story.Options {
+		fmt.Println("Print", slices.Index(story.Options, option)+1, "to:")
+		fmt.Println(option.Text)
+	}
+	fmt.Println("Print 0 to exit program.")
+	fmt.Println()
 }
