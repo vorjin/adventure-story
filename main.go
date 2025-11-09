@@ -55,13 +55,15 @@ func storyHandler(str map[string]Chapter) http.HandlerFunc {
 			//executing template
 			err := tmpl.Execute(w, story)
 			if err != nil {
-				panic(err)
+				http.Error(w, "Failed to execute html template.", http.StatusNotFound)
 			}
-
 			return
-		} else {
-			fmt.Printf("Chapter key not found: %s", r.URL.Path)
+		} else if path == "" {
 			http.Redirect(w, r, "intro", http.StatusFound)
+		} else {
+			fmt.Printf("No path found: %s", path)
+			http.Error(w, "Something went wrong...", http.StatusNotFound)
+			return
 		}
 	}
 }
